@@ -3,15 +3,17 @@ package route
 import (
 	"bytes"
 	"encoding/json"
+	"net"
 	"net/http"
 	"strings"
 	"time"
 
 	C "github.com/Dreamacro/clash/constant"
+	_ "github.com/Dreamacro/clash/constant/mime"
 	"github.com/Dreamacro/clash/log"
-	T "github.com/Dreamacro/clash/tunnel"
+	"github.com/Dreamacro/clash/tunnel/statistic"
 
-	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/cors"
 	"github.com/go-chi/render"
 	"github.com/gorilla/websocket"
@@ -81,10 +83,15 @@ func Start(addr string, secret string) {
 		})
 	}
 
-	log.Infoln("RESTful API listening at: %s", addr)
-	err := http.ListenAndServe(addr, r)
+	l, err := net.Listen("tcp", addr)
 	if err != nil {
-		log.Errorln("External controller error: %s", err.Error())
+		log.Errorln("External controller listen error: %s", err)
+		return
+	}
+	serverAddr = l.Addr().String()
+	log.Infoln("RESTful API listening at: %s", serverAddr)
+	if err = http.Serve(l, r); err != nil {
+		log.Errorln("External controller serve error: %s", err)
 	}
 }
 
@@ -143,7 +150,7 @@ func traffic(w http.ResponseWriter, r *http.Request) {
 
 	tick := time.NewTicker(time.Second)
 	defer tick.Stop()
-	t := T.DefaultManager
+	t := statistic.DefaultManager
 	buf := &bytes.Buffer{}
 	var err error
 	for range tick.C {

@@ -8,26 +8,30 @@ import (
 	"github.com/Dreamacro/clash/common/cache"
 	"github.com/Dreamacro/clash/component/fakeip"
 	"github.com/Dreamacro/clash/component/trie"
+	C "github.com/Dreamacro/clash/constant"
+	"github.com/Dreamacro/clash/context"
 	"github.com/Dreamacro/clash/log"
 
 	D "github.com/miekg/dns"
 )
 
-type handler func(r *D.Msg) (*D.Msg, error)
-type middleware func(next handler) handler
+type (
+	handler    func(ctx *context.DNSContext, r *D.Msg) (*D.Msg, error)
+	middleware func(next handler) handler
+)
 
 func withHosts(hosts *trie.DomainTrie) middleware {
 	return func(next handler) handler {
-		return func(r *D.Msg) (*D.Msg, error) {
+		return func(ctx *context.DNSContext, r *D.Msg) (*D.Msg, error) {
 			q := r.Question[0]
 
 			if !isIPRequest(q) {
-				return next(r)
+				return next(ctx, r)
 			}
 
 			record := hosts.Search(strings.TrimRight(q.Name, "."))
 			if record == nil {
-				return next(r)
+				return next(ctx, r)
 			}
 
 			ip := record.Data.(net.IP)
@@ -46,9 +50,10 @@ func withHosts(hosts *trie.DomainTrie) middleware {
 
 				msg.Answer = []D.RR{rr}
 			} else {
-				return next(r)
+				return next(ctx, r)
 			}
 
+			ctx.SetType(context.DNSTypeHost)
 			msg.SetRcode(r, D.RcodeSuccess)
 			msg.Authoritative = true
 			msg.RecursionAvailable = true
@@ -60,14 +65,14 @@ func withHosts(hosts *trie.DomainTrie) middleware {
 
 func withMapping(mapping *cache.LruCache) middleware {
 	return func(next handler) handler {
-		return func(r *D.Msg) (*D.Msg, error) {
+		return func(ctx *context.DNSContext, r *D.Msg) (*D.Msg, error) {
 			q := r.Question[0]
 
 			if !isIPRequest(q) {
-				return next(r)
+				return next(ctx, r)
 			}
 
-			msg, err := next(r)
+			msg, err := next(ctx, r)
 			if err != nil {
 				return nil, err
 			}
@@ -99,12 +104,12 @@ func withMapping(mapping *cache.LruCache) middleware {
 
 func withFakeIP(fakePool *fakeip.Pool) middleware {
 	return func(next handler) handler {
-		return func(r *D.Msg) (*D.Msg, error) {
+		return func(ctx *context.DNSContext, r *D.Msg) (*D.Msg, error) {
 			q := r.Question[0]
 
 			host := strings.TrimRight(q.Name, ".")
-			if fakePool.LookupHost(host) {
-				return next(r)
+			if fakePool.ShouldSkipped(host) {
+				return next(ctx, r)
 			}
 
 			switch q.Qtype {
@@ -113,7 +118,7 @@ func withFakeIP(fakePool *fakeip.Pool) middleware {
 			}
 
 			if q.Qtype != D.TypeA {
-				return next(r)
+				return next(ctx, r)
 			}
 
 			rr := &D.A{}
@@ -123,6 +128,7 @@ func withFakeIP(fakePool *fakeip.Pool) middleware {
 			msg := r.Copy()
 			msg.Answer = []D.RR{rr}
 
+			ctx.SetType(context.DNSTypeFakeIP)
 			setMsgTTL(msg, 1)
 			msg.SetRcode(r, D.RcodeSuccess)
 			msg.Authoritative = true
@@ -134,7 +140,8 @@ func withFakeIP(fakePool *fakeip.Pool) middleware {
 }
 
 func withResolver(resolver *Resolver) handler {
-	return func(r *D.Msg) (*D.Msg, error) {
+	return func(ctx *context.DNSContext, r *D.Msg) (*D.Msg, error) {
+		ctx.SetType(context.DNSTypeRaw)
 		q := r.Question[0]
 
 		// return a empty AAAA msg when ipv6 disabled
@@ -172,11 +179,11 @@ func newHandler(resolver *Resolver, mapper *ResolverEnhancer) handler {
 		middlewares = append(middlewares, withHosts(resolver.hosts))
 	}
 
-	if mapper.mode == FAKEIP {
+	if mapper.mode == C.DNSFakeIP {
 		middlewares = append(middlewares, withFakeIP(mapper.fakePool))
 	}
 
-	if mapper.mode != NORMAL {
+	if mapper.mode != C.DNSNormal {
 		middlewares = append(middlewares, withMapping(mapper.mapping))
 	}
 

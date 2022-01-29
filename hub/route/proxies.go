@@ -7,12 +7,13 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/Dreamacro/clash/adapters/outbound"
-	"github.com/Dreamacro/clash/adapters/outboundgroup"
+	"github.com/Dreamacro/clash/adapter"
+	"github.com/Dreamacro/clash/adapter/outboundgroup"
+	"github.com/Dreamacro/clash/component/profile/cachefile"
 	C "github.com/Dreamacro/clash/constant"
 	"github.com/Dreamacro/clash/tunnel"
 
-	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/render"
 )
 
@@ -77,7 +78,7 @@ func updateProxy(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	proxy := r.Context().Value(CtxKeyProxy).(*outbound.Proxy)
+	proxy := r.Context().Value(CtxKeyProxy).(*adapter.Proxy)
 	selector, ok := proxy.ProxyAdapter.(*outboundgroup.Selector)
 	if !ok {
 		render.Status(r, http.StatusBadRequest)
@@ -91,6 +92,7 @@ func updateProxy(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	cachefile.Cache().SetSelected(proxy.Name(), req.Name)
 	render.NoContent(w, r)
 }
 

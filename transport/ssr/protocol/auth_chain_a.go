@@ -15,7 +15,7 @@ import (
 	"github.com/Scorpio69t/clash/log"
 	"github.com/Scorpio69t/clash/transport/ssr/tools"
 
-	"github.com/Scorpio69t/go-shadowsocks2/core"
+	"github.com/Dreamacro/go-shadowsocks2/core"
 )
 
 func init() {

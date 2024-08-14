@@ -14,7 +14,7 @@ require (
 replace github.com/Scorpio69t/clash => ../
 
 require (
-	github.com/Scorpio69t/go-shadowsocks2 v0.1.7 // indirect
+	github.com/Dreamacro/go-shadowsocks2 v0.1.7 // indirect
 	github.com/Microsoft/go-winio v0.5.1 // indirect
 	github.com/containerd/containerd v1.5.8 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect

@@ -7,9 +7,9 @@ import (
 	"io"
 	"net"
 
-	"github.com/Dreamacro/clash/common/pool"
+	"github.com/Scorpio69t/clash/common/pool"
 
-	"github.com/Dreamacro/go-shadowsocks2/shadowaead"
+	"github.com/Scorpio69t/go-shadowsocks2/shadowaead"
 )
 
 const (

@@ -3,10 +3,10 @@ package tproxy
 import (
 	"net"
 
-	"github.com/Dreamacro/clash/adapter/inbound"
-	"github.com/Dreamacro/clash/common/pool"
-	C "github.com/Dreamacro/clash/constant"
-	"github.com/Dreamacro/clash/transport/socks5"
+	"github.com/Scorpio69t/clash/adapter/inbound"
+	"github.com/Scorpio69t/clash/common/pool"
+	C "github.com/Scorpio69t/clash/constant"
+	"github.com/Scorpio69t/clash/transport/socks5"
 )
 
 type UDPListener struct {

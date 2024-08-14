@@ -5,11 +5,11 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/Dreamacro/clash/adapter/outbound"
-	"github.com/Dreamacro/clash/common/singledo"
-	"github.com/Dreamacro/clash/component/dialer"
-	C "github.com/Dreamacro/clash/constant"
-	"github.com/Dreamacro/clash/constant/provider"
+	"github.com/Scorpio69t/clash/adapter/outbound"
+	"github.com/Scorpio69t/clash/common/singledo"
+	"github.com/Scorpio69t/clash/component/dialer"
+	C "github.com/Scorpio69t/clash/constant"
+	"github.com/Scorpio69t/clash/constant/provider"
 )
 
 type urlTestOption func(*URLTest)

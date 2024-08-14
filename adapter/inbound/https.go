@@ -4,8 +4,8 @@ import (
 	"net"
 	"net/http"
 
-	C "github.com/Dreamacro/clash/constant"
-	"github.com/Dreamacro/clash/context"
+	C "github.com/Scorpio69t/clash/constant"
+	"github.com/Scorpio69t/clash/context"
 )
 
 // NewHTTPS receive CONNECT request and return ConnContext

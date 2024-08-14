@@ -3,9 +3,9 @@ package inbound
 import (
 	"net"
 
-	C "github.com/Dreamacro/clash/constant"
-	"github.com/Dreamacro/clash/context"
-	"github.com/Dreamacro/clash/transport/socks5"
+	C "github.com/Scorpio69t/clash/constant"
+	"github.com/Scorpio69t/clash/context"
+	"github.com/Scorpio69t/clash/transport/socks5"
 )
 
 // NewHTTP receive normal http request and return HTTPContext

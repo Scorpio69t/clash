@@ -6,14 +6,14 @@ import (
 	"strconv"
 	"sync"
 
-	"github.com/Dreamacro/clash/adapter/inbound"
-	C "github.com/Dreamacro/clash/constant"
-	"github.com/Dreamacro/clash/listener/http"
-	"github.com/Dreamacro/clash/listener/mixed"
-	"github.com/Dreamacro/clash/listener/redir"
-	"github.com/Dreamacro/clash/listener/socks"
-	"github.com/Dreamacro/clash/listener/tproxy"
-	"github.com/Dreamacro/clash/log"
+	"github.com/Scorpio69t/clash/adapter/inbound"
+	C "github.com/Scorpio69t/clash/constant"
+	"github.com/Scorpio69t/clash/listener/http"
+	"github.com/Scorpio69t/clash/listener/mixed"
+	"github.com/Scorpio69t/clash/listener/redir"
+	"github.com/Scorpio69t/clash/listener/socks"
+	"github.com/Scorpio69t/clash/listener/tproxy"
+	"github.com/Scorpio69t/clash/log"
 )
 
 var (

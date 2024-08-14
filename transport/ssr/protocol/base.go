@@ -10,10 +10,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Dreamacro/clash/common/pool"
-	"github.com/Dreamacro/clash/log"
+	"github.com/Scorpio69t/clash/common/pool"
+	"github.com/Scorpio69t/clash/log"
 
-	"github.com/Dreamacro/go-shadowsocks2/core"
+	"github.com/Scorpio69t/go-shadowsocks2/core"
 )
 
 type Base struct {

@@ -11,7 +11,7 @@ import (
 	"syscall"
 	"unsafe"
 
-	"github.com/Dreamacro/clash/log"
+	"github.com/Scorpio69t/clash/log"
 )
 
 // store process name for when dealing with multiple PROCESS-NAME rules

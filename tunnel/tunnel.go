@@ -8,14 +8,14 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Dreamacro/clash/adapter/inbound"
-	"github.com/Dreamacro/clash/component/nat"
-	"github.com/Dreamacro/clash/component/resolver"
-	C "github.com/Dreamacro/clash/constant"
-	"github.com/Dreamacro/clash/constant/provider"
-	icontext "github.com/Dreamacro/clash/context"
-	"github.com/Dreamacro/clash/log"
-	"github.com/Dreamacro/clash/tunnel/statistic"
+	"github.com/Scorpio69t/clash/adapter/inbound"
+	"github.com/Scorpio69t/clash/component/nat"
+	"github.com/Scorpio69t/clash/component/resolver"
+	C "github.com/Scorpio69t/clash/constant"
+	"github.com/Scorpio69t/clash/constant/provider"
+	icontext "github.com/Scorpio69t/clash/context"
+	"github.com/Scorpio69t/clash/log"
+	"github.com/Scorpio69t/clash/tunnel/statistic"
 )
 
 var (

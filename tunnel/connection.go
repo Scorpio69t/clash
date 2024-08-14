@@ -6,10 +6,10 @@ import (
 	"net"
 	"time"
 
-	N "github.com/Dreamacro/clash/common/net"
-	"github.com/Dreamacro/clash/common/pool"
-	"github.com/Dreamacro/clash/component/resolver"
-	C "github.com/Dreamacro/clash/constant"
+	N "github.com/Scorpio69t/clash/common/net"
+	"github.com/Scorpio69t/clash/common/pool"
+	"github.com/Scorpio69t/clash/component/resolver"
+	C "github.com/Scorpio69t/clash/constant"
 )
 
 func handleUDPToRemote(packet C.UDPPacket, pc C.PacketConn, metadata *C.Metadata) error {
@@ -73,7 +73,7 @@ func relay(leftConn, rightConn net.Conn) {
 	go func() {
 		buf := pool.Get(pool.RelayBufferSize)
 		// Wrapping to avoid using *net.TCPConn.(ReadFrom)
-		// See also https://github.com/Dreamacro/clash/pull/1209
+		// See also https://github.com/Scorpio69t/clash/pull/1209
 		_, err := io.CopyBuffer(N.WriteOnlyWriter{Writer: leftConn}, N.ReadOnlyReader{Reader: rightConn}, buf)
 		pool.Put(buf)
 		leftConn.SetReadDeadline(time.Now())
